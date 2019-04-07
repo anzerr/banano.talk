@@ -5,11 +5,17 @@ The encoding can be slimed down by using the pow to store the charset. If we use
 
 This is a first attempt to use this expanded charset to store longer text.
 
+#### `Install`
+``` bash
+npm install --save git+https://git@github.com/anzerr/banano.talk.git
+```
+
+### `Example`
 ```
 const Talk = require('banano.talk');
 
 (new Talk()).encode('howtobanano.info').then((res) => {
-	console.log('done', res);
+	console.log(res);
 }).catch(console.log);
 ```
 The output should look like this
