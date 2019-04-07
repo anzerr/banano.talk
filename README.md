@@ -1,7 +1,7 @@
 
 ### `Intro`
-Saw the way [monkeytalks](https://github.com/BananoCoin/monkeytalks) encodes text into the amount in a transaction. I wanted to expand on this idea
-The encoding can be slimed down by using the pow to store the charset. If we use the past two digest of the pow that expands the charset to 65535.
+I saw the way [monkeytalks](https://github.com/BananoCoin/monkeytalks) encodes text into the amount in a transaction. I wanted to expand on this idea to try and get longer text saved.
+The encoding can be slimed down by using the pow to store the charset. If we use the past two digest of the PoW that expands the charset to 65535.
 
 This is a first attempt to use this expanded charset to store longer text.
 
