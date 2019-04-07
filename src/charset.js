@@ -3,7 +3,7 @@ const fs = require('fs.promisify'),
 	Work = require('./charset/work.js');
 
 const numbers = '0123456789'.split(''),
-	special = '_-./;:'.split('');
+	special = '=_-./;:'.split('');
 
 
 class Charset {
@@ -13,7 +13,7 @@ class Charset {
 	}
 
 	valid(text) {
-		return text.match(/^[a-z0-9_\-\.\/;:\s]+\s$/);
+		return text.match(/^[a-z0-9_=\-\.\/;:\s]+\s$/);
 	}
 
 	load(gen = false) {
@@ -21,7 +21,7 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
-			return fs.access('/etc/passwd', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+			return fs.access('./src/charset/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();
 			});
 		}).then(() => {
@@ -76,7 +76,7 @@ class Charset {
 				let w = work.get();
 				let a = [].concat([' '], numbers, special, json[1], part[0][w[0]], part[1][w[0]], part[2][w[0]]);
 				sets.push({
-					regex: `^[${a.join('').replace(/\./g, '\\.')}]+$`,
+					regex: `^(${a.reverse().join('|').replace(/([\/\.\$])/g, '\\$1')})+$`,
 					char: a
 				});
 				work.increment();
