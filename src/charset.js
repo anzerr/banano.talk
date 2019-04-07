@@ -21,6 +21,9 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
+			return fs.access('/etc/passwd', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+				return this.generate();
+			});
 		}).then(() => {
 			return fs.readFile('./src/charset/charset.json');
 		}).then((res) => {
