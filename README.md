@@ -10,7 +10,7 @@ This is a first attempt to use this expanded charset to store longer text.
 npm install --save git+https://git@github.com/anzerr/banano.talk.git
 ```
 
-### `Example`
+#### `Example`
 ``` javascript
 const Talk = require('banano.talk');
 
