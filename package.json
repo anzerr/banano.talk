@@ -21,14 +21,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com///github.com/anzerr/banano.talk.git"
+		"url": "git@github.com:anzerr/banano.talk.git"
 	},
 	"engines": {
 		"node": ">= 0.10.0"
 	},
 	"types": "index.d.ts",
 	"bugs": {
-		"url": "https://github.com///github.com/anzerr/banano.talk/issues"
+		"url": "https://github.com/anzerr/banano.talk/issues"
 	},
-	"homepage": "https://github.com///github.com/anzerr/banano.talk#readme"
+	"homepage": "https://github.com/anzerr/banano.talk#readme"
 }
