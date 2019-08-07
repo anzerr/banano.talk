@@ -7,7 +7,8 @@ This is a first attempt to use this expanded charset to store longer text.
 
 #### `Install`
 ``` bash
-npm install --save git+https://git@github.com/anzerr/banano.talk.git
+npm install --save git+https://github.com///github.com/anzerr/banano.talk.git
+npm install --save @anzerr/banano.talk
 ```
 
 #### `Example`
