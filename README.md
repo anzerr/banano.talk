@@ -13,10 +13,19 @@ npm install --save @anzerr/banano.talk
 
 #### `Example`
 ``` javascript
-const Talk = require('banano.talk');
+const {Advanced, Simple} = require('banano.talk');
 
-(new Talk()).encode('howtobanano.info').then((res) => {
-	console.log(res);
+const advanced = new Advanced();
+advanced.encode('send ban i guess').then((res) => {
+	console.log('done', res);
+}).catch(console.log);
+
+const simple = new Simple();
+simple.encode('send ban, i guess').then((res) => {
+	console.log('done', res);
+	return simple.decode(res.code);
+}).then((res) => {
+	console.log('done', res);
 }).catch(console.log);
 ```
 The output should look like this

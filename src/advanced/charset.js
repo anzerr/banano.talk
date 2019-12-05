@@ -1,5 +1,6 @@
 
 const fs = require('fs.promisify'),
+	is = require('type.util'),
 	Work = require('./charset/work.js');
 
 const numbers = '0123456789'.split(''),
@@ -12,7 +13,7 @@ class Charset {
 	}
 
 	valid(text) {
-		return text.match(/^[a-z0-9_=\-\.\/;:\s]+\s$/);
+		return is.string(text) && text.match(/^[a-z0-9_=\-\.\/;:\s]+\s$/);
 	}
 
 	load(gen = false) {
@@ -20,22 +21,28 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
-			return fs.access('./src/extra/charset/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+			return fs.access('./src/advanced/charset/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();
 			});
 		}).then(() => {
-			return fs.readFile('./src/extra/charset/charset.json');
+			return fs.readFile('./src/advanced/charset/charset.json');
 		}).then((res) => {
 			let set = JSON.parse(res.toString());
 			for (let i in set) {
 				set[i].regex = new RegExp(set[i].regex);
+				let map = {};
+				set[i].charset = set[i].char.join('');
+				for (let x in set[i].char) {
+					map[set[i].char[x]] = Number(x);
+				}
+				set[i].char = map;
 			}
 			return (this.sets = set);
 		});
 	}
 
 	buildData() {
-		return fs.readFile('./src/extra/charset/data.txt').then((res) => {
+		return fs.readFile('./src/advanced/charset/data.txt').then((res) => {
 			let data = res.toString().split('\n'), json = {};
 			for (let i in data) {
 				let n = data[i].split('\t');
@@ -52,7 +59,7 @@ class Charset {
 				}
 				json[i] = o;
 			}
-			return fs.writeFile('./src/extra/charset/data.json', JSON.stringify(json, null, '\t')).then(() => json);
+			return fs.writeFile('./src/advanced/charset/data.json', JSON.stringify(json, null, '\t')).then(() => json);
 		});
 	}
 
@@ -66,7 +73,7 @@ class Charset {
 			for (let i = 2; i <= 4; i++) {
 				let o = [];
 				for (let x = 0; x < 41; x++) {
-					o.push(json[i].slice(x * size, (x + 1) * size));
+					o.push(json[i].slice(x * size, ((x + 1) * size) - ((i === 4) ? 3 : 0)));
 				}
 				part.push(o);
 			}
@@ -80,8 +87,25 @@ class Charset {
 				});
 				work.increment();
 			}
-			return fs.writeFile('./src/extra/charset/charset.json', JSON.stringify(sets, null, '\t')).then(() => sets);
+			return fs.writeFile('./src/advanced/charset/charset.json', JSON.stringify(sets, null, '\t')).then(() => sets);
 		});
+	}
+
+	checksum(num) {
+		if (!is.string(num) || !num.match(/^\d+$/)) {
+			return false;
+		}
+		let sum = 0;
+		for (let i in num) {
+			sum = sum + Number(num[i]);
+		}
+
+		sum++;
+		return (sum % 10).toString();
+	}
+
+	validate(num, checksum) {
+		return (is.string(num) && is.string(checksum) && checksum.match(/^\d$/) && this.checksum(num) === checksum);
 	}
 
 }

@@ -1,5 +1,6 @@
 
-const Charset = require('./charset.js');
+const Charset = require('./charset.js'),
+	{b10} = require('../util');
 
 class Encoder {
 
@@ -16,7 +17,7 @@ class Encoder {
 
 	encode(text) {
 		return this.charset.load().then((sets) => {
-			text = (text + ' ').toLowerCase();
+			text = `${text} `.toLowerCase();
 			if (!this.charset.valid(text)) {
 				throw new Error('this text can\'t be encoded');
 			}
@@ -24,10 +25,10 @@ class Encoder {
 			for (let i in sets) {
 				if (text.match(sets[i].regex)) {
 					let match = [], tmp = text;
-					while(tmp) {
+					while (tmp) {
 						let best = 0, k = 0;
 						for (let v in sets[i].char) {
-							let m = tmp.match(new RegExp('^' + sets[i].char[v].replace(/\./g, '\\.')));
+							let m = tmp.match(new RegExp('^' + v.replace(/\./g, '\\.')));
 							if (m && m[0] && m[0].length > best) {
 								best = m[0].length;
 								k = v;
@@ -36,22 +37,19 @@ class Encoder {
 						match.push(k);
 						tmp = tmp.slice(best);
 					}
+
 					if (match.length <= this.size.msg) {
-						let txt = [], code = [], sum = 0;
-						for (let x in match) {
-							txt.push(sets[i].char[match[x]]);
-							code.push(match[x].padStart(2, 0));
-						}
-						code = code.reverse().join('').padStart(this.size.msg * 2, '0');
-						for (let x in code) {
-							sum += Number(code[x]);
-						}
+						let code = b10.encode(match, sets[i].char);
+						let checksum = this.charset.checksum(code.toString()),
+							charset = (i.toString(16)).padStart(4, 0),
+							value = `${code}${checksum}${this.flag}`;
 						return {
 							text: text,
-							charset: (i.toString(16)).padStart(4, 0),
-							blocks: txt,
+							charset: charset,
 							raw: match,
-							code: code + (sum % 10) + this.flag
+							sum: checksum,
+							cost: Number(value) / 1e29,
+							code: value
 						};
 					}
 				}

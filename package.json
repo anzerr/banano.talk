@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"fs.promisify": "git+https://git@github.com/anzerr/fs.promisify.git",
-		"type.util": "git+https://git@github.com/anzerr/type.util.git",
+		"type.util": "git+https://git@github.com/anzerr/type.util.git"
 	},
 	"repository": {
 		"type": "git",
