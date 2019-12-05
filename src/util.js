@@ -1,21 +1,20 @@
-
 class B10 {
 
 	encode(plaintext, charset) {
-        let quotient = 0n,
+		let quotient = 0n,
 			modulus = 0n,
 			max = BigInt(Object.keys(charset).length + 1);
 
-        for (let char of plaintext) {
-            modulus = BigInt(charset[char] + 1);
-            quotient = (quotient * max) + modulus
-        }
+		for (let char of plaintext) {
+			modulus = BigInt(charset[char] + 1);
+			quotient = (quotient * max) + modulus;
+		}
 
-        return quotient;
-    }
+		return quotient;
+	}
 
 	decode(quotient, charset) {
-	    let plaintext = '',
+		let plaintext = '',
 			modulus = 0n;
 		const map = [];
 		for (let i in charset) {
@@ -23,19 +22,21 @@ class B10 {
 		}
 		const max = BigInt(map.length + 1);
 
-	    while (quotient != 0n || modulus != 0n) {
-	        modulus = quotient % max;
-	        if (quotient > 0n) {
-	            quotient = BigInt(quotient / max);
-	        }
-	        if (modulus > 0n) {
-	            plaintext = `${map[modulus - 1n]}${plaintext}`;
-	        }
-	    }
+		while (quotient !== 0n || modulus !== 0n) {
+			modulus = quotient % max;
+			if (quotient > 0n) {
+				quotient = BigInt(quotient / max);
+			}
+			if (modulus > 0n) {
+				plaintext = `${map[modulus - 1n]}${plaintext}`;
+			}
+		}
 
-	    return plaintext;
+		return plaintext;
 	}
 
 }
 
-module.exports = {b10: new B10()};
+module.exports = {
+	b10: new B10()
+};
