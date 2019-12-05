@@ -80,16 +80,17 @@ class Charset {
 			}
 			charsets = charsets.sort((a, b) => a.length - b.length);
 		}
+		console.log(charsets);
+		let out = {};
 		for (let i in charsets) {
-			console.log(charsets[i]);
 			let a = charsets[i].split('');
-			charsets[i] = {
+			out[i] = {
 				id: i,
 				regex: `^(${a.join('|').replace(/([\/\.\*\?\!\+\(\)\[\]\$])/g, '\\$1')})+$`,
 				char: a
 			};
 		}
-		return fs.writeFile('./src/simple/charset.json', JSON.stringify(charsets, null, '\t')).then(() => charsets);
+		return fs.writeFile('./src/simple/charset.json', JSON.stringify(out, null, '\t')).then(() => out);
 	}
 
 	checksum(num) {
