@@ -1,5 +1,5 @@
 
-const {Advanced, Simple} = require('./index.js');
+const {Simple} = require('../index.js');
 
 /* const advanced = new Advanced();
 advanced.encode('send ban i guess').then((res) => {

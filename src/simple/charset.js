@@ -34,12 +34,12 @@ class Charset {
 	}
 
 	load(gen = false) {
+		if (this.sets && !gen) {
+			return Promise.resolve(this.sets);
+		}
 		return Promise.resolve().then(() => {
 			if (gen) {
 				return this.generate();
-			}
-			if (this.sets) {
-				return this.sets;
 			}
 			return fs.access('./src/simple/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();

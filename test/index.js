@@ -102,7 +102,10 @@ t.validate();
 Promise.all([
 	t.encode(),
 	t.decode()
-]).catch((e) => {
+]).then(() => {
+	console.log('here');
+	require('./perf');
+}).catch((e) => {
 	console.log(e);
 	process.exit(1);
 });
