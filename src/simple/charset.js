@@ -1,11 +1,12 @@
 
 const fs = require('fs.promisify'),
+	staticCharset = require('./static'),
 	is = require('type.util');
 
 const letters = 'etaoinsrhldcumfpgwybvkxjqz',
 	noVowels = 'tnsrhldcmfpgwbvkxjqz',
 	numbers = '1234567890',
-	puncsList = ['', '~', '!', '@', '#', '$', '%', '&', '*', '(', ')', '-', '_', '+', '=', ',', '.', '?', '/', '<', '>', ';', ':', '[', ']', '\''];
+	puncsList = ['', '\'', ']', '[', ':', ';', '>', '<', '/', '?', '.', ',', '=', '+', '_', '-', ')', '(', '*', '&', '%', '$', '~', '#', '@', '!'];
 
 const part = [];
 for (let i = 10; i <= letters.length; i++) {
@@ -29,7 +30,7 @@ class Charset {
 	}
 
 	valid(text) {
-		return is.string(text) && text.match(/^[a-z0-9~\!@#\$\%\&\*\(\)\-\_\+\=,\.\?\/<>;:\[\]\\\s]+\s$/);
+		return is.string(text) && text.match(/^\s[a-z0-9~\!@#\$\%\&\*\(\)\-\_\+\=,\.\?\/<>;:\[\]\\\s]+$/);
 	}
 
 	load(gen = false) {
@@ -57,24 +58,28 @@ class Charset {
 		});
 	}
 
-	generate() {
+	generate(useStatic = true) {
 		let charsets = [];
-		const punc = puncsList.slice(0);
+		if (useStatic) { // this is static because the underlayer code found https://github.com/pawapps/nanote/blob/master/src/nanote.js#L10 is wrong
+			charsets = staticCharset;
+		} else {
+			const punc = puncsList.slice(0);
 
-		let size = [4, 8, 16];
-		for (let x in size) {
-			for (let i = 0; i < puncsList.length; i = i + size[x]) {
-				punc.push(puncsList.join('').slice(i, i + size[x]));
+			let size = [4, 8, 16];
+			for (let x in size) {
+				for (let i = 0; i < puncsList.length; i = i + size[x]) {
+					punc.push(puncsList.join('').slice(i, i + size[x]));
+				}
 			}
-		}
-		punc.push(puncsList.join(''));
+			punc.push(puncsList.join(''));
 
-		for (let x in punc) {
-			for (let i in part) {
-				charsets.push(`${part[i]}${punc[x]}`);
+			for (let x in punc) {
+				for (let i in part) {
+					charsets.push(`${part[i]}${punc[x]}`);
+				}
 			}
+			charsets = charsets.sort((a, b) => a.length - b.length);
 		}
-		charsets = charsets.sort((a, b) => a.length - b.length);
 		for (let i in charsets) {
 			let a = charsets[i].split('');
 			charsets[i] = {
@@ -88,7 +93,7 @@ class Charset {
 
 	checksum(num) {
 		if (!is.string(num) || !num.match(/^\d+$/)) {
-			return false;
+			return null;
 		}
 		let sum = 0;
 		for (let i in num) {
@@ -100,7 +105,7 @@ class Charset {
 	}
 
 	validate(num, checksum) {
-		return (is.string(num) && is.string(checksum) && checksum.match(/^\d$/) && this.checksum(num) === checksum);
+		return (is.string(num) && is.string(checksum) && checksum.match(/^\d$/) !== null && this.checksum(num) === checksum);
 	}
 
 }

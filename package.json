@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "node test.js"
+		"linter": "eslint src/**",
+		"test": "node test"
 	},
 	"keywords": [],
 	"author": "anzerr",
@@ -13,6 +14,9 @@
 		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
 	},
 	"eslintConfig": {
+		"globals": {
+			"BigInt": true
+		},
 		"extends": "eslint-config-basic"
 	},
 	"dependencies": {
