@@ -1,5 +1,9 @@
 
 ### `Intro`
+![GitHub Actions status | linter](https://github.com/anzerr/banano.talk/workflows/linter/badge.svg)
+![GitHub Actions status | publish](https://github.com/anzerr/banano.talk/workflows/publish/badge.svg)
+![GitHub Actions status | test](https://github.com/anzerr/banano.talk/workflows/test/badge.svg)
+
 Util to encode and decode for [monkeytalks](https://github.com/BananoCoin/monkeytalks). This has the start of a new spec I wanted to expand on the idea to try and get longer text saved.
 The encoding can be slimed down by using the pow to store the charset. If we use the last two digest of the PoW that expands the charset to 65535.
 
