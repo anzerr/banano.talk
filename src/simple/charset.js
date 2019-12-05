@@ -38,6 +38,9 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
+			if (this.sets) {
+				return this.sets;
+			}
 			return fs.access('./src/simple/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();
 			});
@@ -80,7 +83,6 @@ class Charset {
 			}
 			charsets = charsets.sort((a, b) => a.length - b.length);
 		}
-		console.log(charsets);
 		let out = {};
 		for (let i in charsets) {
 			let a = charsets[i].split('');
