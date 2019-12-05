@@ -81,6 +81,7 @@ class Charset {
 			charsets = charsets.sort((a, b) => a.length - b.length);
 		}
 		for (let i in charsets) {
+			console.log(charsets[i]);
 			let a = charsets[i].split('');
 			charsets[i] = {
 				id: i,
