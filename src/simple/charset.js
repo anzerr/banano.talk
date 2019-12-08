@@ -1,5 +1,6 @@
 
 const fs = require('fs.promisify'),
+	path = require('path'),
 	staticCharset = require('./static'),
 	is = require('type.util');
 
@@ -41,11 +42,11 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
-			return fs.access('./src/simple/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+			return fs.access(path.join(__dirname, 'charset.json'), fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();
 			});
 		}).then(() => {
-			return fs.readFile('./src/simple/charset.json');
+			return fs.readFile(path.join(__dirname, 'charset.json'));
 		}).then((res) => {
 			let set = JSON.parse(res.toString());
 			for (let i in set) {
@@ -92,7 +93,7 @@ class Charset {
 				char: a
 			};
 		}
-		return fs.writeFile('./src/simple/charset.json', JSON.stringify(out, null, '\t')).then(() => out);
+		return fs.writeFile(path.join(__dirname, 'charset.json'), JSON.stringify(out, null, '\t')).then(() => out);
 	}
 
 	checksum(num) {

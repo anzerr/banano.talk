@@ -1,5 +1,6 @@
 
 const fs = require('fs.promisify'),
+	path = require('path'),
 	is = require('type.util'),
 	Work = require('./charset/work.js');
 
@@ -21,11 +22,11 @@ class Charset {
 			if (gen) {
 				return this.generate();
 			}
-			return fs.access('./src/advanced/charset/charset.json', fs.constants.R_OK | fs.constants.W_OK).catch(() => {
+			return fs.access(path.join(__dirname, 'charset/charset.json'), fs.constants.R_OK | fs.constants.W_OK).catch(() => {
 				return this.generate();
 			});
 		}).then(() => {
-			return fs.readFile('./src/advanced/charset/charset.json');
+			return fs.readFile(path.join(__dirname, 'charset/charset.json'));
 		}).then((res) => {
 			let set = JSON.parse(res.toString());
 			for (let i in set) {
@@ -42,7 +43,7 @@ class Charset {
 	}
 
 	buildData() {
-		return fs.readFile('./src/advanced/charset/data.txt').then((res) => {
+		return fs.readFile(path.join(__dirname, 'charset/data.txt')).then((res) => {
 			let data = res.toString().split('\n'), json = {};
 			for (let i in data) {
 				let n = data[i].split('\t');
@@ -59,7 +60,7 @@ class Charset {
 				}
 				json[i] = o;
 			}
-			return fs.writeFile('./src/advanced/charset/data.json', JSON.stringify(json, null, '\t')).then(() => json);
+			return fs.writeFile(path.join(__dirname, 'charset/data.json'), JSON.stringify(json, null, '\t')).then(() => json);
 		});
 	}
 
@@ -87,7 +88,7 @@ class Charset {
 				});
 				work.increment();
 			}
-			return fs.writeFile('./src/advanced/charset/charset.json', JSON.stringify(sets, null, '\t')).then(() => sets);
+			return fs.writeFile(path.join(__dirname, 'charset/charset.json'), JSON.stringify(sets, null, '\t')).then(() => sets);
 		});
 	}
 
