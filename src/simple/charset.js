@@ -1,6 +1,7 @@
 
 const fs = require('fs.promisify'),
 	path = require('path'),
+	events = require('events'),
 	staticCharset = require('./static'),
 	is = require('type.util');
 
@@ -24,10 +25,11 @@ part.push(...[
 	` ${numbers}`
 ]);
 
-class Charset {
+class Charset extends events {
 
 	constructor() {
-		this.sets = null;
+		super();
+		this.sets = [false, null];
 	}
 
 	valid(text) {
@@ -35,9 +37,13 @@ class Charset {
 	}
 
 	load(gen = false) {
-		if (this.sets && !gen) {
+		if (this.sets[1] && !gen) {
 			return Promise.resolve(this.sets);
 		}
+		if (this.sets[0] && !gen) {
+			return new Promise((resolve) => this.once('load', resolve));
+		}
+		this.sets[0] = true;
 		return Promise.resolve().then(() => {
 			if (gen) {
 				return this.generate();
@@ -58,6 +64,7 @@ class Charset {
 				}
 				set[i].char = map;
 			}
+			this.emit('load', set);
 			return (this.sets = set);
 		});
 	}
