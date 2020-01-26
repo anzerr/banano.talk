@@ -30,6 +30,7 @@ class Charset extends events {
 	constructor() {
 		super();
 		this.sets = [false, null];
+		this.setMaxListeners(0);
 	}
 
 	valid(text) {
