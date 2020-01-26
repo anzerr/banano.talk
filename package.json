@@ -1,17 +1,29 @@
 {
 	"name": "banano.talk",
 	"version": "1.0.17",
-	"description": "",
+	"description": "Util to encode and decode for monkeytalks",
+	"keywords": [
+		"banano",
+		"encode",
+		"nodejs",
+		"steganography",
+		"util"
+	],
+	"homepage": "https://github.com/anzerr/banano.talk#readme",
+	"bugs": {
+		"url": "https://github.com/anzerr/banano.talk/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:anzerr/banano.talk.git"
+	},
+	"license": "MIT",
+	"author": "anzerr",
 	"main": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
 		"linter": "eslint src/**",
 		"test": "node test/index.js"
-	},
-	"keywords": [],
-	"author": "anzerr",
-	"license": "MIT",
-	"devDependencies": {
-		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
 	},
 	"eslintConfig": {
 		"globals": {
@@ -23,16 +35,10 @@
 		"fs.promisify": "git+https://git@github.com/anzerr/fs.promisify.git",
 		"type.util": "git+https://git@github.com/anzerr/type.util.git"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:anzerr/banano.talk.git"
+	"devDependencies": {
+		"eslint-config-basic": "git+https://git@github.com/anzerr/eslintrc.git"
 	},
 	"engines": {
 		"node": ">= 0.10.0"
-	},
-	"types": "index.d.ts",
-	"bugs": {
-		"url": "https://github.com/anzerr/banano.talk/issues"
-	},
-	"homepage": "https://github.com/anzerr/banano.talk#readme"
+	}
 }
